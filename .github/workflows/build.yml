@@ -1,0 +1,33 @@
+name: Build Kivy APK
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install system dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y \
+          python3-pip \
+          openjdk-17-jdk \
+          unzip zip \
+          libffi-dev libssl-dev \
+          build-essential \
+          git
+
+    - name: Install Python tools
+      run: |
+        pip3 install --upgrade pip
+        pip3 install buildozer cython
+
+    - name: Build APK
+      run: |
+        buildozer android debug
