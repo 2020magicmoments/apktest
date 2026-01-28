@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
     - name: Checkout code
@@ -26,7 +26,15 @@ jobs:
     - name: Install Python tools
       run: |
         pip3 install --upgrade pip
-        pip3 install buildozer cython
+        pip3 install buildozer==1.5.0 cython==0.29.36
+
+    - name: Initialize Buildozer (download Android SDK)
+      run: |
+        buildozer android help
+
+    - name: Accept Android SDK licenses
+      run: |
+        yes | /home/runner/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
 
     - name: Build APK
       run: |
@@ -37,4 +45,3 @@ jobs:
       with:
         name: kivy-apk
         path: bin/*.apk
-
